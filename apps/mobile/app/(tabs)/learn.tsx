@@ -1,5 +1,7 @@
 import { View, StyleSheet } from "react-native";
 import { Link } from "expo-router";
+import { useTranslation } from "react-i18next";
+
 import { Screen } from "@/components/ui/screen";
 import { Text } from "@/components/ui/text";
 import { Card } from "@/components/ui/card";
@@ -7,20 +9,30 @@ import { useTheme } from "@/hooks/use-theme";
 import { SPACING } from "@/theme";
 import { IconSymbol } from "@/components/ui/icon-symbol";
 
+type LessonKey = "greetings" | "numbers" | "simpleSentences" | "voiceIntro";
+type Lesson = {
+  id: string;
+  key: LessonKey;
+  unlocked: boolean;
+  type: "vocab" | "grammar" | "speaking";
+};
+
+const LESSONS: Lesson[] = [
+  { id: "1", key: "greetings", unlocked: true, type: "vocab" },
+  { id: "2", key: "numbers", unlocked: true, type: "vocab" },
+  { id: "3", key: "simpleSentences", unlocked: false, type: "grammar" },
+  { id: "4", key: "voiceIntro", unlocked: false, type: "speaking" },
+];
+
 export default function LearnScreen() {
   const theme = useTheme();
-  const lessons = [
-    { id: "1", title: "Selamlaşma ve tanışma", subtitle: "Unit 1 · 5 alıştırma", unlocked: true, type: "vocab" as const },
-    { id: "2", title: "Sayılar 1-20", subtitle: "Unit 1 · 4 alıştırma", unlocked: true, type: "vocab" as const },
-    { id: "3", title: "Basit cümleler", subtitle: "Unit 1 · 6 alıştırma", unlocked: false, type: "grammar" as const },
-    { id: "4", title: "Sesli sohbet: tanışma", subtitle: "Unit 1 · 1 sohbet", unlocked: false, type: "speaking" as const },
-  ];
+  const { t } = useTranslation();
 
   return (
     <Screen scroll>
       <View style={styles.headerRow}>
         <View>
-          <Text variant="caption" color="textSecondary">Merhaba 👋</Text>
+          <Text variant="caption" color="textSecondary">{t("learn.greeting")}</Text>
           <Text variant="title">English · A1</Text>
         </View>
         <View style={styles.statsRow}>
@@ -31,11 +43,11 @@ export default function LearnScreen() {
       </View>
 
       <Text variant="heading" style={{ marginTop: SPACING.xl, marginBottom: SPACING.md }}>
-        Bugünün yolu
+        {t("learn.todayPath")}
       </Text>
 
       <View style={{ gap: SPACING.md }}>
-        {lessons.map((lesson) => (
+        {LESSONS.map((lesson) => (
           <Link key={lesson.id} href={`/lesson/${lesson.id}`} asChild>
             <Card>
               <View style={styles.lessonRow}>
@@ -47,8 +59,8 @@ export default function LearnScreen() {
                   />
                 </View>
                 <View style={{ flex: 1 }}>
-                  <Text variant="bodyMedium">{lesson.title}</Text>
-                  <Text variant="caption" color="textSecondary">{lesson.subtitle}</Text>
+                  <Text variant="bodyMedium">{t(`learn.lessons.${lesson.key}.title`)}</Text>
+                  <Text variant="caption" color="textSecondary">{t(`learn.lessons.${lesson.key}.subtitle`)}</Text>
                 </View>
               </View>
             </Card>

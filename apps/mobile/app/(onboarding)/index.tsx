@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { Alert, View, StyleSheet, ActivityIndicator } from "react-native";
 import { useRouter } from "expo-router";
+import { useTranslation } from "react-i18next";
+
 import { Screen } from "@/components/ui/screen";
 import { Text } from "@/components/ui/text";
 import { Button } from "@/components/ui/button";
@@ -9,17 +11,27 @@ import { useTheme } from "@/hooks/use-theme";
 import { IconSymbol } from "@/components/ui/icon-symbol";
 import { useSession } from "@/hooks/use-session";
 import { signInAnonymously, hasCompletedOnboarding } from "@/lib/auth-actions";
+import { useLocaleStore } from "@/state/locale";
 import { BRAND } from "@ailt/shared";
 
 export default function WelcomeScreen() {
   const router = useRouter();
   const theme = useTheme();
   const session = useSession();
+  const { t } = useTranslation();
+  const hasPickedLanguage = useLocaleStore((s) => s.hasPicked);
   const [busy, setBusy] = useState(false);
+
+  // First-run: send the user to the in-app language picker before anything else.
+  useEffect(() => {
+    if (!hasPickedLanguage) {
+      router.replace("/(onboarding)/app-language");
+    }
+  }, [hasPickedLanguage, router]);
 
   // If we already have a session, route the user past welcome.
   useEffect(() => {
-    if (!session) return;
+    if (!session || !hasPickedLanguage) return;
     let cancelled = false;
     hasCompletedOnboarding(session.user.id).then((done) => {
       if (cancelled) return;
@@ -29,7 +41,7 @@ export default function WelcomeScreen() {
     return () => {
       cancelled = true;
     };
-  }, [session, router]);
+  }, [session, router, hasPickedLanguage]);
 
   async function tryFree() {
     try {
@@ -39,13 +51,13 @@ export default function WelcomeScreen() {
       setBusy(false);
       const msg =
         err?.message?.includes("disabled") || err?.code === "anonymous_provider_disabled"
-          ? "Anonim girişler bu projede kapalı. Supabase Dashboard → Authentication → Sign In/Up → 'Allow anonymous sign-ins' açmalısın."
-          : err?.message ?? "Giriş başarısız.";
-      Alert.alert("Misafir girişi başarısız", msg);
+          ? t("welcome.anonymousDisabledMessage")
+          : err?.message ?? t("welcome.guestFailedFallback");
+      Alert.alert(t("welcome.guestFailedTitle"), msg);
     }
   }
 
-  if (session === undefined) {
+  if (session === undefined || !hasPickedLanguage) {
     return (
       <Screen padded>
         <View style={styles.hero}>
@@ -68,22 +80,22 @@ export default function WelcomeScreen() {
           {BRAND.tagline}
         </Text>
         <Text variant="caption" color="textSecondary" align="center" style={{ marginTop: SPACING.xs }}>
-          AI öğretmenle konuş, eğlen, öğren.
+          {t("welcome.subTagline")}
         </Text>
       </View>
 
       <View style={{ gap: SPACING.md }}>
-        <Button label="Misafir Olarak Dene" onPress={tryFree} loading={busy} />
+        <Button label={t("welcome.tryAsGuest")} onPress={tryFree} loading={busy} />
         <Button
-          label="E-posta ile devam et"
+          label={t("welcome.continueWithEmail")}
           variant="secondary"
           onPress={() => router.push("/(onboarding)/sign-up")}
         />
       </View>
 
       <Text variant="caption" color="textSecondary" align="center" style={{ marginTop: SPACING.lg }}>
-        Devam ederek Kullanım Koşulları ve Gizlilik Politikası'nı kabul etmiş olursun.{"\n"}
-        Apple ile giriş yakında.
+        {t("welcome.terms")}{"\n"}
+        {t("welcome.appleComingSoon")}
       </Text>
     </Screen>
   );

@@ -1,22 +1,51 @@
-import { View, StyleSheet, Image } from "react-native";
+import { View, StyleSheet, Alert } from "react-native";
+import { useRouter } from "expo-router";
+import { useTranslation } from "react-i18next";
+
 import { Screen } from "@/components/ui/screen";
 import { Text } from "@/components/ui/text";
 import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { SPACING, RADIUS } from "@/theme";
 import { IconSymbol } from "@/components/ui/icon-symbol";
 import { useTheme } from "@/hooks/use-theme";
+import { signOut } from "@/lib/auth-actions";
+import { useLocaleStore } from "@/state/locale";
+import { getDeviceLanguage } from "@/lib/i18n";
 
-const SETTINGS_ROWS = [
-  { icon: "globe", label: "Dil ve aksan", value: "English · American" },
-  { icon: "bell.fill", label: "Bildirimler", value: "Açık" },
-  { icon: "moon.fill", label: "Görünüm", value: "Sistem" },
-  { icon: "creditcard.fill", label: "Abonelik", value: "Free" },
-  { icon: "lock.fill", label: "Gizlilik", value: "" },
-  { icon: "questionmark.circle.fill", label: "Yardım & destek", value: "" },
-];
+type RowKey = "appLanguage" | "languageAndAccent" | "notifications" | "appearance" | "subscription" | "privacy" | "help";
+type Row = { key: RowKey; icon: string; valueKey?: "on" | "system" | "free"; onPress?: () => void };
 
 export default function ProfileScreen() {
+  const router = useRouter();
   const theme = useTheme();
+  const { t } = useTranslation();
+  const appLanguage = useLocaleStore((s) => s.appLanguage);
+  const activeAppLang = appLanguage ?? getDeviceLanguage();
+
+  async function handleSignOut() {
+    try {
+      await signOut();
+      router.replace("/(onboarding)");
+    } catch (err: any) {
+      Alert.alert(t("profile.signOutFailedTitle"), err?.message ?? t("common.error"));
+    }
+  }
+
+  const rows: Row[] = [
+    {
+      key: "appLanguage",
+      icon: "character.book.closed.fill",
+      onPress: () => router.push("/settings/app-language"),
+    },
+    { key: "languageAndAccent", icon: "globe" },
+    { key: "notifications", icon: "bell.fill", valueKey: "on" },
+    { key: "appearance", icon: "moon.fill", valueKey: "system" },
+    { key: "subscription", icon: "creditcard.fill", valueKey: "free" },
+    { key: "privacy", icon: "lock.fill" },
+    { key: "help", icon: "questionmark.circle.fill" },
+  ];
+
   return (
     <Screen scroll>
       <View style={styles.header}>
@@ -24,27 +53,49 @@ export default function ProfileScreen() {
           <Text variant="display" color="white">T</Text>
         </View>
         <Text variant="title" style={{ marginTop: SPACING.md }}>Talha</Text>
-        <Text variant="caption" color="textSecondary">@talha · Sıra #547</Text>
+        <Text variant="caption" color="textSecondary">@talha · {t("profile.rankPrefix")}547</Text>
       </View>
 
       <View style={styles.statRow}>
-        <StatBox label="XP" value="220" color={theme.colors.xp} icon="bolt.fill" theme={theme} />
-        <StatBox label="Seri" value="3" color={theme.colors.streak} icon="flame.fill" theme={theme} />
-        <StatBox label="Kupa" value="2" color={theme.colors.accent} icon="trophy.fill" theme={theme} />
+        <StatBox label={t("profile.stats.xp")} value="220" color={theme.colors.xp} icon="bolt.fill" theme={theme} />
+        <StatBox label={t("profile.stats.streak")} value="3" color={theme.colors.streak} icon="flame.fill" theme={theme} />
+        <StatBox label={t("profile.stats.trophies")} value="2" color={theme.colors.accent} icon="trophy.fill" theme={theme} />
       </View>
 
-      <Text variant="heading" style={{ marginTop: SPACING.xl, marginBottom: SPACING.md }}>Ayarlar</Text>
+      <Text variant="heading" style={{ marginTop: SPACING.xl, marginBottom: SPACING.md }}>
+        {t("profile.settingsTitle")}
+      </Text>
       <View style={{ gap: SPACING.sm }}>
-        {SETTINGS_ROWS.map((row) => (
-          <Card key={row.label}>
-            <View style={styles.row}>
-              <IconSymbol name={row.icon as any} size={20} color={theme.colors.accent} />
-              <Text variant="bodyMedium" style={{ flex: 1 }}>{row.label}</Text>
-              {row.value ? <Text variant="callout" color="textSecondary">{row.value}</Text> : null}
-              <IconSymbol name="chevron.right" size={18} color={theme.colors.textSecondary} />
-            </View>
-          </Card>
-        ))}
+        {rows.map((row) => {
+          const label = t(`profile.rows.${row.key}`);
+          let value: string | null = null;
+          if (row.key === "appLanguage") {
+            value = activeAppLang === "tr" ? t("appLanguage.turkish") : t("appLanguage.english");
+          } else if (row.valueKey) {
+            value = t(`profile.values.${row.valueKey}`);
+          }
+          return (
+            <Card key={row.key} onPress={row.onPress}>
+              <View style={styles.row}>
+                <IconSymbol name={row.icon as any} size={20} color={theme.colors.accent} />
+                <Text variant="bodyMedium" style={{ flex: 1 }}>{label}</Text>
+                {value ? <Text variant="callout" color="textSecondary">{value}</Text> : null}
+                <IconSymbol name="chevron.right" size={18} color={theme.colors.textSecondary} />
+              </View>
+            </Card>
+          );
+        })}
+      </View>
+
+      <View style={{ marginTop: SPACING.xxl, gap: SPACING.sm }}>
+        <Text variant="caption" color="textSecondary" align="center">
+          {t("profile.devMode")}
+        </Text>
+        <Button
+          label={t("profile.signOut")}
+          variant="secondary"
+          onPress={handleSignOut}
+        />
       </View>
     </Screen>
   );

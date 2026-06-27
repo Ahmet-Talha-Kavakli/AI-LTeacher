@@ -1,0 +1,192 @@
+{
+  "common": {
+    "continue": "Devam et",
+    "back": "Geri dön",
+    "retry": "Tekrar dene",
+    "close": "Kapat",
+    "finish": "Bitir",
+    "next": "Sonraki",
+    "cancel": "Vazgeç",
+    "save": "Kaydet",
+    "comingSoon": "Yakında",
+    "error": "Bir şeyler ters gitti.",
+    "loading": "Yükleniyor…"
+  },
+  "welcome": {
+    "subTagline": "AI öğretmenle konuş, eğlen, öğren.",
+    "tryAsGuest": "Misafir Olarak Dene",
+    "continueWithEmail": "E-posta ile devam et",
+    "terms": "Devam ederek Kullanım Koşulları ve Gizlilik Politikası'nı kabul etmiş olursun.",
+    "appleComingSoon": "Apple ile giriş yakında.",
+    "guestFailedTitle": "Misafir girişi başarısız",
+    "guestFailedFallback": "Giriş başarısız.",
+    "anonymousDisabledMessage": "Anonim girişler bu projede kapalı. Supabase Dashboard → Authentication → Sign In/Up → 'Allow anonymous sign-ins' açmalısın."
+  },
+  "signUp": {
+    "createAccountTitle": "Hesap oluştur",
+    "signInTitle": "Giriş yap",
+    "appleHint": "E-posta ile ilerleyebilirsin. Apple Sign-In yakında.",
+    "emailLabel": "E-posta",
+    "emailPlaceholder": "ornek@email.com",
+    "passwordLabel": "Şifre",
+    "passwordPlaceholderNew": "En az 6 karakter",
+    "registerAction": "Kayıt ol",
+    "signInAction": "Giriş yap",
+    "alreadyHaveAccount": "Zaten hesabım var",
+    "createAccountSwap": "Hesap oluştur",
+    "missingInfoTitle": "Eksik bilgi",
+    "missingInfoBody": "E-posta ve en az 6 karakterli şifre gerekli.",
+    "errorTitle": "Hata",
+    "errorFallback": "Bir şeyler ters gitti."
+  },
+  "language": {
+    "title": "Hangi dili öğrenmek istiyorsun?",
+    "hint": "Daha sonra istediğin zaman değiştirebilirsin."
+  },
+  "accent": {
+    "title": "Hangi aksanı tercih edersin?",
+    "hint": "Öğretmenin bu aksanla konuşur ve aksana özgü kelimeler kullanır.",
+    "continueToTest": "Seviye testine geç",
+    "needLanguageFirst": "Önce bir dil seçmelisin."
+  },
+  "placement": {
+    "questionOf": "Soru {{i}} / {{total}}",
+    "submitLast": "Bitir ve sonucu gör",
+    "submitNext": "Sonraki",
+    "loading": "Sorular hazırlanıyor…",
+    "loadFailedTitle": "Sorular yüklenemedi",
+    "loadFailedBodyHttp": "Sorular alınamadı (HTTP {{status}}).",
+    "loadFailedBodyGeneric": "Sorular yüklenirken sorun oldu. Bağlantını kontrol et.",
+    "tryAgain": "Tekrar dene",
+    "needLanguageFirst": "Önce dil seçmelisin.",
+    "back": "Geri dön",
+    "category": {
+      "grammar": "Dilbilgisi",
+      "vocabulary": "Kelime",
+      "context": "Bağlam"
+    }
+  },
+  "result": {
+    "evaluating": "Cevapların değerlendiriliyor…",
+    "yourLevel": "Senin seviyen {{level}}",
+    "dailyPathHint": "Sana özel günlük {{minutes}} dakikalık bir öğrenme yolu hazırladım.",
+    "offlineNotice": "(Offline puanlama — backend bağlandığında AI puanlaması devreye girecek.)",
+    "startLearning": "Öğrenmeye Başla",
+    "lessonsWait": "{{langName}} dersleri seni bekliyor."
+  },
+  "tabs": {
+    "learn": "Öğren",
+    "practice": "Pratik",
+    "tutor": "Öğretmen",
+    "leaderboard": "Lider",
+    "profile": "Profil"
+  },
+  "learn": {
+    "greeting": "Merhaba 👋",
+    "todayPath": "Bugünün yolu",
+    "lessons": {
+      "greetings": { "title": "Selamlaşma ve tanışma", "subtitle": "Unit 1 · 5 alıştırma" },
+      "numbers": { "title": "Sayılar 1-20", "subtitle": "Unit 1 · 4 alıştırma" },
+      "simpleSentences": { "title": "Basit cümleler", "subtitle": "Unit 1 · 6 alıştırma" },
+      "voiceIntro": { "title": "Sesli sohbet: tanışma", "subtitle": "Unit 1 · 1 sohbet" }
+    }
+  },
+  "practice": {
+    "title": "Pratik",
+    "subtitle": "Hızlı bir antrenmanla seriyi koru.",
+    "onlineDuel": "Online Düello",
+    "onlineDuelDesc": "5 sorulu hızlı kapışma · 50 XP",
+    "quickOptions": "Hızlı seçenekler",
+    "modes": {
+      "vocab": { "title": "Kelime Antrenmanı", "desc": "5 dk · 20 XP" },
+      "listen": { "title": "Dinleme Pratiği", "desc": "5 dk · 25 XP" },
+      "speak": { "title": "Telaffuz Mücadelesi", "desc": "3 dk · 30 XP" },
+      "story": { "title": "Mini Hikaye", "desc": "7 dk · 40 XP" }
+    }
+  },
+  "tutorTab": {
+    "title": "AI Öğretmen",
+    "subtitle": "Bir mod seç, hemen konuşmaya başla.",
+    "modes": {
+      "text": { "title": "Yazılı Sohbet", "desc": "Klavyeyle pratik yap, anlık düzeltme" },
+      "voice": { "title": "Sesli Sohbet", "desc": "Gerçek zamanlı AI öğretmenle konuş" },
+      "video": { "title": "Video Ders", "desc": "Pixar tarzı 3D karakterle yüz yüze" }
+    },
+    "accentCard": {
+      "title": "Aksanını seç",
+      "subtitle": "American · British · Scottish · Australian — öğretmen aksana göre konuşur ve düzeltir."
+    }
+  },
+  "leaderboard": {
+    "title": "Lider Tablosu",
+    "subtitle": "Bu haftanın global sıralaması · İlk 100 + senin sıran",
+    "youSuffix": " (sen)"
+  },
+  "profile": {
+    "rankPrefix": "Sıra #",
+    "stats": {
+      "xp": "XP",
+      "streak": "Seri",
+      "trophies": "Kupa"
+    },
+    "settingsTitle": "Ayarlar",
+    "rows": {
+      "appLanguage": "Uygulama dili",
+      "languageAndAccent": "Dil ve aksan",
+      "notifications": "Bildirimler",
+      "appearance": "Görünüm",
+      "subscription": "Abonelik",
+      "privacy": "Gizlilik",
+      "help": "Yardım & destek"
+    },
+    "values": {
+      "on": "Açık",
+      "system": "Sistem",
+      "free": "Free",
+      "automatic": "Otomatik"
+    },
+    "devMode": "Geliştirme modu",
+    "signOut": "Çıkış Yap (sıfırdan başla)",
+    "signOutFailedTitle": "Çıkış başarısız"
+  },
+  "lesson": {
+    "titleHash": "Ders #{{id}}",
+    "stubBody": "Bu ekran yakında interaktif egzersizler, telaffuz puanlama ve XP ödülleriyle dolacak."
+  },
+  "voiceTutor": {
+    "title": "AI Öğretmen",
+    "stubBody": "ElevenLabs Conversational AI bağlantısı yakında.\nPixar tarzı 3D avatar Meshy'den gelecek.",
+    "tapToSpeak": "Konuşmak için dokun",
+    "finish": "Bitir"
+  },
+  "chatTutor": {
+    "needLanguageTitle": "Önce dil seçimini tamamla",
+    "needLanguageBody": "AI öğretmenle konuşmak için bir dil ve seviye gerekiyor.",
+    "goToLanguagePicker": "Dil seçimine git",
+    "headerTitle": "AI Öğretmen",
+    "welcomeMessage": "Merhaba! Ben Suno.",
+    "introHelp": "Bugün {{langName}} dilinde pratik yapalım. Sana {{level}} seviyesinde nasıl yardımcı olabilirim?",
+    "typing": "AI öğretmen yazıyor…",
+    "inputPlaceholder": "Bir şey yaz...",
+    "suggestions": {
+      "greetings": "Let's practice greetings",
+      "orderCoffee": "How do I order coffee?",
+      "correctMistakes": "Correct my mistakes please"
+    },
+    "errors": {
+      "quotaExceeded": "Bugünlük sohbet kotanı doldurdun.",
+      "rateLimit": "Çok hızlı yazıyorsun, biraz bekle.",
+      "sessionExpired": "Oturumun süresi dolmuş — uygulamayı kapatıp aç.",
+      "generic": "Hata: {{message}}"
+    }
+  },
+  "appLanguage": {
+    "title": "Uygulama dilini seç",
+    "subtitle": "Bunu Ayarlar'dan istediğin zaman değiştirebilirsin.",
+    "automatic": "Otomatik",
+    "automaticHint": "Cihazımın diliyle aynı",
+    "moreSoon": "Daha fazla dil yakında.",
+    "english": "English",
+    "turkish": "Türkçe"
+  }
+}

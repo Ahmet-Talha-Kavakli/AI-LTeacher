@@ -1,5 +1,7 @@
 import { View, StyleSheet } from "react-native";
 import { useRouter } from "expo-router";
+import { useTranslation } from "react-i18next";
+
 import { Screen } from "@/components/ui/screen";
 import { Text } from "@/components/ui/text";
 import { Button } from "@/components/ui/button";
@@ -10,6 +12,7 @@ import { IconSymbol } from "@/components/ui/icon-symbol";
 export default function VoiceTutorScreen() {
   const router = useRouter();
   const theme = useTheme();
+  const { t } = useTranslation();
   return (
     <Screen>
       <View style={styles.body}>
@@ -17,11 +20,10 @@ export default function VoiceTutorScreen() {
           <IconSymbol name="person.crop.circle.fill" size={96} color="#FFFFFF" />
         </View>
         <Text variant="title" align="center" style={{ marginTop: SPACING.xl }}>
-          AI Öğretmen
+          {t("voiceTutor.title")}
         </Text>
         <Text variant="caption" color="textSecondary" align="center" style={{ marginTop: SPACING.sm }}>
-          ElevenLabs Conversational AI bağlantısı yakında.{"\n"}
-          Pixar tarzı 3D avatar Meshy'den gelecek.
+          {t("voiceTutor.stubBody")}
         </Text>
 
         <View style={styles.micWrap}>
@@ -29,12 +31,12 @@ export default function VoiceTutorScreen() {
             <IconSymbol name="mic.fill" size={48} color="#FFFFFF" />
           </View>
           <Text variant="caption" color="textSecondary" align="center" style={{ marginTop: SPACING.sm }}>
-            Konuşmak için dokun
+            {t("voiceTutor.tapToSpeak")}
           </Text>
         </View>
       </View>
 
-      <Button label="Bitir" variant="secondary" onPress={() => router.back()} />
+      <Button label={t("voiceTutor.finish")} variant="secondary" onPress={() => router.back()} />
     </Screen>
   );
 }

@@ -8,13 +8,18 @@ export const PlacementStartRequest = z.object({
 });
 export type PlacementStartRequest = z.infer<typeof PlacementStartRequest>;
 
+export const PlacementCategory = z.enum(["grammar", "vocabulary", "context"]);
+export type PlacementCategory = z.infer<typeof PlacementCategory>;
+
 export const PlacementQuestion = z.object({
   id: z.string(),
   prompt: z.string(),
   type: z.enum(["multiple_choice", "fill_blank", "translate", "listen"]),
+  category: PlacementCategory.optional(),
   options: z.array(z.string()).optional(),
-  audioUrl: z.string().url().optional(),
+  audioUrl: z.string().optional(),
   difficulty: CefrLevel,
+  explanation: z.string().optional(),
 });
 export type PlacementQuestion = z.infer<typeof PlacementQuestion>;
 

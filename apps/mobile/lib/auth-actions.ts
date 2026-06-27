@@ -1,4 +1,5 @@
 import { supabase } from "./supabase";
+import { api } from "./api";
 
 export async function signInAnonymously() {
   const { data, error } = await supabase.auth.signInAnonymously();
@@ -19,6 +20,13 @@ export async function signInWithEmail(email: string, password: string) {
 }
 
 export async function signOut() {
+  // Anonymous users are ghost accounts — delete them on sign-out so the DB
+  // doesn't accumulate one row per "try it free" tap. Best-effort: even if
+  // the delete API fails, we still sign out locally.
+  const { data } = await supabase.auth.getSession();
+  if (data.session?.user.is_anonymous) {
+    await api("/api/account/delete-if-anonymous", { method: "POST" }).catch(() => null);
+  }
   const { error } = await supabase.auth.signOut();
   if (error) throw error;
 }

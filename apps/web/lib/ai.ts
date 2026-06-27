@@ -1,22 +1,30 @@
 import { gateway } from "@ai-sdk/gateway";
 
-// Model tiering — cost-first.
+// All AI traffic flows through Vercel AI Gateway. Benefits:
+//  - one place to track cost per feature (dashboard at vercel.com/.../ai-gateway)
+//  - retry / fallback / load-balancing if a provider degrades
+//  - swap models with a single string change (no redeploy of code logic)
+//  - Anthropic prompt-cache + OpenAI cache pass through unchanged
 //
+// Auth: the SDK reads AI_GATEWAY_API_KEY from env automatically.
+// Direct provider keys (OPENAI_API_KEY / ANTHROPIC_API_KEY) are kept in
+// .env.local as a safety net only — code below does NOT use them.
+
 // TUTOR: primary chat tutor. gpt-4o-mini is ~20x cheaper than Sonnet,
-// great enough for conversational tutoring. OpenAI auto-prompt-caching
-// kicks in when system prompts exceed ~1024 tokens.
+// great enough for conversational tutoring. OpenAI prompt-caching kicks
+// in automatically when system prompts exceed ~1024 tokens.
 export const TUTOR_MODEL = gateway("openai/gpt-4o-mini");
 
 // LIGHT: fast & cheap structured work. Placement scoring, open-ended
-// grading, short corrections. Haiku 4.5 supports JSON schema output and
+// grading, short corrections. Haiku 4.5 supports JSON-schema output and
 // Anthropic prompt caching (90% off cache hits) for stable system prompts.
-export const LIGHT_MODEL = gateway("anthropic/claude-haiku-4-5");
+export const LIGHT_MODEL = gateway("anthropic/claude-haiku-4.5");
 
-// CONTENT: dev-only — lesson content generation seed scripts. Runs once,
+// CONTENT: dev-only — lesson-content generation seed scripts. Runs once,
 // output is persisted to Supabase. User traffic NEVER hits this model.
 // If you find yourself calling this from a user-facing route, stop and
 // move that workload to LIGHT_MODEL.
-export const CONTENT_MODEL = gateway("anthropic/claude-opus-4-7");
+export const CONTENT_MODEL = gateway("anthropic/claude-opus-4.7");
 
 // Back-compat alias — old code path. Prefer LIGHT_MODEL going forward.
 export const GRADING_MODEL = LIGHT_MODEL;
@@ -24,7 +32,8 @@ export const GRADING_MODEL = LIGHT_MODEL;
 /**
  * Cacheable Anthropic system message. Wrap any long stable system text in
  * this — the next call within 5 min reads 90% off the cost. Pass the result
- * as the first entry of `messages`.
+ * as the first entry of `messages`. Works identically when called via the
+ * gateway — providerOptions are forwarded to Anthropic.
  */
 export function cachedSystemMessage(text: string) {
   return {
@@ -42,9 +51,6 @@ export function tutorSystemPrompt(opts: {
   level: string;
   nativeLanguage?: string;
 }) {
-  // Kept long & stable on purpose: OpenAI auto-caches prompts > ~1024 tokens
-  // (50% discount on cached portion). Anthropic models can wrap this in
-  // cachedSystem() for 90% discount.
   return `You are Suno, a friendly and encouraging AI language tutor.
 
 Target language: ${opts.language}
@@ -70,6 +76,6 @@ TONE
 - If the learner sounds frustrated, acknowledge it ("This one trips up a lot of people — let's slow down.") and lower difficulty.
 
 SAFETY & SCOPE
-- Stay on language-learning topics. If the learner asks for unrelated help, gently redirect with "Bunu derste pek konuşmuyoruz ama şu cümleyi <target language> nasıl söylerdin?"
+- Stay on language-learning topics. If the learner asks for unrelated help, gently redirect with "We don't usually cover that in class — how would you say this in <target language> instead?"
 - Do not produce medical, legal, or harmful advice. Do not impersonate real people.`;
 }

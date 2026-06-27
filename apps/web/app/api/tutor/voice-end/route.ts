@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server";
 import { z } from "zod";
 import { requireUser } from "@/lib/auth";
-import { consume, getTier, quotaExceededResponse } from "@/lib/quota";
+import { consume, getTier } from "@/lib/quota";
 
 export const runtime = "nodejs";
 

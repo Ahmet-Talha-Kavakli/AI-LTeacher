@@ -1,4 +1,6 @@
 import { View, StyleSheet } from "react-native";
+import { useTranslation } from "react-i18next";
+
 import { Screen } from "@/components/ui/screen";
 import { Text } from "@/components/ui/text";
 import { Card } from "@/components/ui/card";
@@ -20,6 +22,7 @@ const MY_ENTRY: Entry = { rank: 547, username: "talha", xp: 220, isMe: true };
 
 export default function LeaderboardScreen() {
   const theme = useTheme();
+  const { t } = useTranslation();
   const medal = (r: number) =>
     r === 1 ? { sym: "crown.fill", color: "#FFD54A" }
     : r === 2 ? { sym: "medal.fill", color: "#C0C0C0" }
@@ -28,19 +31,19 @@ export default function LeaderboardScreen() {
 
   return (
     <Screen scroll>
-      <Text variant="title">Lider Tablosu</Text>
+      <Text variant="title">{t("leaderboard.title")}</Text>
       <Text variant="caption" color="textSecondary" style={{ marginBottom: SPACING.xl }}>
-        Bu haftanın global sıralaması · İlk 100 + senin sıran
+        {t("leaderboard.subtitle")}
       </Text>
 
       <Card variant="accent" style={{ marginBottom: SPACING.lg }}>
-        <Row entry={MY_ENTRY} medal={medal(MY_ENTRY.rank)} theme={theme} />
+        <Row entry={MY_ENTRY} medal={medal(MY_ENTRY.rank)} theme={theme} youSuffix={t("leaderboard.youSuffix")} />
       </Card>
 
       <View style={{ gap: SPACING.sm }}>
         {TOP.map((e) => (
           <Card key={e.rank}>
-            <Row entry={e} medal={medal(e.rank)} theme={theme} />
+            <Row entry={e} medal={medal(e.rank)} theme={theme} youSuffix={t("leaderboard.youSuffix")} />
           </Card>
         ))}
       </View>
@@ -48,7 +51,7 @@ export default function LeaderboardScreen() {
   );
 }
 
-function Row({ entry, medal, theme }: { entry: Entry; medal: { sym: string; color: string }; theme: ReturnType<typeof useTheme> }) {
+function Row({ entry, medal, theme, youSuffix }: { entry: Entry; medal: { sym: string; color: string }; theme: ReturnType<typeof useTheme>; youSuffix: string }) {
   return (
     <View style={styles.row}>
       <View style={[styles.rankBubble, { backgroundColor: entry.isMe ? theme.colors.accent : theme.colors.surface }]}>
@@ -58,7 +61,7 @@ function Row({ entry, medal, theme }: { entry: Entry; medal: { sym: string; colo
           <Text variant="bodyMedium" color={entry.isMe ? "white" : "text"}>{entry.rank}</Text>
         )}
       </View>
-      <Text variant="bodyMedium" style={{ flex: 1 }}>{entry.username}{entry.isMe ? " (sen)" : ""}</Text>
+      <Text variant="bodyMedium" style={{ flex: 1 }}>{entry.username}{entry.isMe ? youSuffix : ""}</Text>
       <Text variant="bodyMedium" color="accent">{entry.xp.toLocaleString()} XP</Text>
     </View>
   );

@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { View, StyleSheet, ActivityIndicator } from "react-native";
 import { useRouter } from "expo-router";
+import { useTranslation } from "react-i18next";
+
 import { Screen } from "@/components/ui/screen";
 import { Text } from "@/components/ui/text";
 import { Button } from "@/components/ui/button";
@@ -9,9 +11,22 @@ import { SPACING, RADIUS } from "@/theme";
 import { useTheme } from "@/hooks/use-theme";
 import { IconSymbol } from "@/components/ui/icon-symbol";
 import { useOnboardingStore } from "@/state/onboarding";
-import { CEFR_DESCRIPTIONS, type CefrLevel, type PlacementSubmitResponse } from "@ailt/shared";
+import {
+  CEFR_DESCRIPTIONS,
+  type AccentCode,
+  type CefrLevel,
+  type LanguageCode,
+  type PlacementSubmitResponse,
+} from "@ailt/shared";
 import { useSession } from "@/hooks/use-session";
 import { api, ApiError } from "@/lib/api";
+import { supabase } from "@/lib/supabase";
+
+const DEFAULT_ACCENT: Record<LanguageCode, AccentCode> = {
+  en: "en-US",
+  es: "es-ES",
+  de: "de-DE",
+};
 
 // Offline fallback: highest difficulty correctly answered.
 function scoreLocal(answers: { questionId: string; answer: string }[]): CefrLevel {
@@ -31,9 +46,16 @@ function scoreLocal(answers: { questionId: string; answer: string }[]): CefrLeve
   return best;
 }
 
+const LANG_DISPLAY: Record<LanguageCode, string> = {
+  en: "English",
+  es: "Español",
+  de: "Deutsch",
+};
+
 export default function ResultScreen() {
   const router = useRouter();
   const theme = useTheme();
+  const { t } = useTranslation();
   const session = useSession();
   const answers = useOnboardingStore((s) => s.answers);
   const language = useOnboardingStore((s) => s.language);
@@ -46,24 +68,45 @@ export default function ResultScreen() {
     if (!session?.user.id || !language || answers.length === 0) return;
     let cancelled = false;
     (async () => {
+      let resolvedLevel: CefrLevel;
+      let resolvedRationale: string | null = null;
+      let fallback = false;
       try {
         const res = await api<PlacementSubmitResponse>("/api/placement/submit", {
           method: "POST",
           body: JSON.stringify({ userId: session.user.id, language, answers }),
         });
         if (cancelled) return;
-        setLevel(res.result.level);
-        setRationale(res.result.rationale);
+        resolvedLevel = res.result.level;
+        resolvedRationale = res.result.rationale;
       } catch (err) {
         if (cancelled) return;
-        // Backend not reachable (no API key, offline, etc.) → score locally
-        const local = scoreLocal(answers);
-        setLevel(local);
-        setUsedFallback(true);
+        resolvedLevel = scoreLocal(answers);
+        fallback = true;
         if (!(err instanceof ApiError)) {
           console.warn("placement submit failed", err);
         }
       }
+
+      const accent = DEFAULT_ACCENT[language];
+      const { error: upsertError } = await supabase
+        .from("user_languages")
+        .upsert(
+          {
+            user_id: session.user.id,
+            language,
+            accent,
+            current_level: resolvedLevel,
+            is_primary: true,
+          },
+          { onConflict: "user_id,language" },
+        );
+      if (upsertError) console.warn("user_languages upsert failed", upsertError);
+
+      if (cancelled) return;
+      setLevel(resolvedLevel);
+      setRationale(resolvedRationale);
+      setUsedFallback(fallback);
     })();
     return () => {
       cancelled = true;
@@ -75,11 +118,13 @@ export default function ResultScreen() {
       <Screen>
         <View style={{ flex: 1, alignItems: "center", justifyContent: "center", gap: SPACING.md }}>
           <ActivityIndicator color={theme.colors.accent} size="large" />
-          <Text variant="bodyMedium" color="textSecondary">Cevapların değerlendiriliyor…</Text>
+          <Text variant="bodyMedium" color="textSecondary">{t("result.evaluating")}</Text>
         </View>
       </Screen>
     );
   }
+
+  const dailyMinutes = level === "A1" ? 10 : 15;
 
   return (
     <Screen>
@@ -88,7 +133,7 @@ export default function ResultScreen() {
           <Text variant="display" color="white">{level}</Text>
         </View>
         <Text variant="title" align="center" style={{ marginTop: SPACING.xl }}>
-          Senin seviyen {level}
+          {t("result.yourLevel", { level })}
         </Text>
         <Text variant="bodyMedium" color="textSecondary" align="center" style={{ marginTop: SPACING.md, paddingHorizontal: SPACING.md }}>
           {rationale ?? CEFR_DESCRIPTIONS[level]}
@@ -98,20 +143,20 @@ export default function ResultScreen() {
           <View style={styles.row}>
             <IconSymbol name="sparkles" size={20} color={theme.colors.accent} />
             <Text variant="callout" style={{ flex: 1 }}>
-              Sana özel günlük {level === "A1" ? "10 dakikalık" : "15 dakikalık"} bir öğrenme yolu hazırladım.
+              {t("result.dailyPathHint", { minutes: dailyMinutes })}
             </Text>
           </View>
           {usedFallback && (
             <Text variant="caption" color="textSecondary" style={{ marginTop: SPACING.sm }}>
-              (Offline puanlama — backend bağlandığında AI puanlaması devreye girecek.)
+              {t("result.offlineNotice")}
             </Text>
           )}
         </Card>
       </View>
 
-      <Button label="Öğrenmeye Başla" onPress={() => router.replace("/(tabs)/learn")} />
+      <Button label={t("result.startLearning")} onPress={() => router.replace("/(tabs)/learn")} />
       <Text variant="caption" color="textSecondary" align="center" style={{ marginTop: SPACING.sm }}>
-        {language === "en" ? "English" : language === "es" ? "Español" : "Deutsch"} dersleri seni bekliyor.
+        {t("result.lessonsWait", { langName: language ? LANG_DISPLAY[language] : "" })}
       </Text>
     </Screen>
   );

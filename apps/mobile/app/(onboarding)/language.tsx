@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { View, StyleSheet } from "react-native";
 import { useRouter } from "expo-router";
+import { useTranslation } from "react-i18next";
+
 import { Screen } from "@/components/ui/screen";
 import { Text } from "@/components/ui/text";
 import { Button } from "@/components/ui/button";
@@ -14,14 +16,15 @@ import { useOnboardingStore } from "@/state/onboarding";
 export default function LanguageScreen() {
   const router = useRouter();
   const theme = useTheme();
+  const { t } = useTranslation();
   const setLanguage = useOnboardingStore((s) => s.setLanguage);
   const [selected, setSelected] = useState<LanguageCode | null>(null);
 
   return (
     <Screen scroll>
-      <Text variant="title">Hangi dili öğrenmek istiyorsun?</Text>
+      <Text variant="title">{t("language.title")}</Text>
       <Text variant="caption" color="textSecondary" style={{ marginBottom: SPACING.xl }}>
-        Daha sonra istediğin zaman değiştirebilirsin.
+        {t("language.hint")}
       </Text>
 
       <View style={{ gap: SPACING.md }}>
@@ -49,7 +52,7 @@ export default function LanguageScreen() {
 
       <View style={{ marginTop: SPACING.xl }}>
         <Button
-          label="Devam et"
+          label={t("common.continue")}
           disabled={!selected}
           onPress={() => {
             if (!selected) return;

@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { View, StyleSheet } from "react-native";
 import { useRouter } from "expo-router";
+import { useTranslation } from "react-i18next";
+
 import { Screen } from "@/components/ui/screen";
 import { Text } from "@/components/ui/text";
 import { Button } from "@/components/ui/button";
@@ -14,6 +16,7 @@ import { useOnboardingStore } from "@/state/onboarding";
 export default function AccentScreen() {
   const router = useRouter();
   const theme = useTheme();
+  const { t } = useTranslation();
   const language = useOnboardingStore((s) => s.language);
   const setAccent = useOnboardingStore((s) => s.setAccent);
   const [selected, setSelected] = useState<AccentCode | null>(null);
@@ -21,8 +24,8 @@ export default function AccentScreen() {
   if (!language) {
     return (
       <Screen>
-        <Text variant="body">Önce bir dil seçmelisin.</Text>
-        <Button label="Geri dön" onPress={() => router.back()} />
+        <Text variant="body">{t("accent.needLanguageFirst")}</Text>
+        <Button label={t("common.back")} onPress={() => router.back()} />
       </Screen>
     );
   }
@@ -31,9 +34,9 @@ export default function AccentScreen() {
 
   return (
     <Screen scroll>
-      <Text variant="title">Hangi aksanı tercih edersin?</Text>
+      <Text variant="title">{t("accent.title")}</Text>
       <Text variant="caption" color="textSecondary" style={{ marginBottom: SPACING.xl }}>
-        Öğretmenin bu aksanla konuşur ve aksana özgü kelimeler kullanır.
+        {t("accent.hint")}
       </Text>
 
       <View style={{ gap: SPACING.md }}>
@@ -60,7 +63,7 @@ export default function AccentScreen() {
 
       <View style={{ marginTop: SPACING.xl }}>
         <Button
-          label="Seviye testine geç"
+          label={t("accent.continueToTest")}
           disabled={!selected}
           onPress={() => {
             if (!selected) return;

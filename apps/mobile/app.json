@@ -10,7 +10,7 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.lingo.app",
+      "bundleIdentifier": "com.suno.app",
       "usesAppleSignIn": true,
       "infoPlist": {
         "NSMicrophoneUsageDescription": "Suno, AI öğretmenle sesli konuşma derslerinde mikrofonunuzu kullanır.",
@@ -20,7 +20,7 @@
       }
     },
     "android": {
-      "package": "com.lingo.app",
+      "package": "com.suno.app",
       "adaptiveIcon": {
         "backgroundColor": "#FF5A5F",
         "foregroundImage": "./assets/images/android-icon-foreground.png",

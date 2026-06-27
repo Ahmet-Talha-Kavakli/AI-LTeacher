@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { ThemeProvider, DarkTheme, DefaultTheme } from "@react-navigation/native";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
@@ -8,6 +8,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "react-native-reanimated";
 
 import { useAppFonts } from "@/lib/fonts";
+import { initI18n, getDeviceLanguage } from "@/lib/i18n";
+import { useLocaleStore } from "@/state/locale";
 import { COLORS } from "@ailt/shared";
 
 SplashScreen.preventAutoHideAsync().catch(() => {});
@@ -25,13 +27,22 @@ export default function RootLayout() {
   const scheme = useColorScheme();
   const isDark = scheme === "dark";
 
+  const appLanguage = useLocaleStore((s) => s.appLanguage);
+  const [i18nReady, setI18nReady] = useState(false);
+
   useEffect(() => {
-    if (fontsLoaded || fontError) {
+    const initial = appLanguage ?? getDeviceLanguage();
+    initI18n(initial);
+    setI18nReady(true);
+  }, [appLanguage]);
+
+  useEffect(() => {
+    if ((fontsLoaded || fontError) && i18nReady) {
       SplashScreen.hideAsync().catch(() => {});
     }
-  }, [fontsLoaded, fontError]);
+  }, [fontsLoaded, fontError, i18nReady]);
 
-  if (!fontsLoaded && !fontError) return null;
+  if ((!fontsLoaded && !fontError) || !i18nReady) return null;
 
   const navTheme = isDark
     ? { ...DarkTheme, colors: { ...DarkTheme.colors, background: COLORS.dark.background, card: COLORS.dark.background, text: COLORS.dark.text, primary: COLORS.dark.accent } }
@@ -45,6 +56,8 @@ export default function RootLayout() {
           <Stack.Screen name="(tabs)" />
           <Stack.Screen name="lesson/[id]" options={{ presentation: "modal" }} />
           <Stack.Screen name="tutor/voice" options={{ presentation: "fullScreenModal" }} />
+          <Stack.Screen name="tutor/chat" options={{ presentation: "modal" }} />
+          <Stack.Screen name="settings/app-language" options={{ presentation: "modal", title: "" }} />
         </Stack>
         <StatusBar style={isDark ? "light" : "dark"} />
       </ThemeProvider>

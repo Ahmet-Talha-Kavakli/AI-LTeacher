@@ -1,0 +1,192 @@
+{
+  "common": {
+    "continue": "Continue",
+    "back": "Back",
+    "retry": "Try again",
+    "close": "Close",
+    "finish": "Finish",
+    "next": "Next",
+    "cancel": "Cancel",
+    "save": "Save",
+    "comingSoon": "Coming soon",
+    "error": "Something went wrong.",
+    "loading": "Loading…"
+  },
+  "welcome": {
+    "subTagline": "Talk to your AI teacher, have fun, and learn.",
+    "tryAsGuest": "Try as guest",
+    "continueWithEmail": "Continue with email",
+    "terms": "By continuing you accept the Terms of Use and Privacy Policy.",
+    "appleComingSoon": "Sign in with Apple coming soon.",
+    "guestFailedTitle": "Guest sign-in failed",
+    "guestFailedFallback": "Sign-in failed.",
+    "anonymousDisabledMessage": "Anonymous sign-ins are disabled for this project. Supabase Dashboard → Authentication → Sign In/Up → enable \"Allow anonymous sign-ins\"."
+  },
+  "signUp": {
+    "createAccountTitle": "Create an account",
+    "signInTitle": "Sign in",
+    "appleHint": "You can continue with email. Sign in with Apple coming soon.",
+    "emailLabel": "Email",
+    "emailPlaceholder": "name@email.com",
+    "passwordLabel": "Password",
+    "passwordPlaceholderNew": "At least 6 characters",
+    "registerAction": "Sign up",
+    "signInAction": "Sign in",
+    "alreadyHaveAccount": "I already have an account",
+    "createAccountSwap": "Create an account",
+    "missingInfoTitle": "Missing info",
+    "missingInfoBody": "Email and a password of at least 6 characters are required.",
+    "errorTitle": "Error",
+    "errorFallback": "Something went wrong."
+  },
+  "language": {
+    "title": "Which language do you want to learn?",
+    "hint": "You can change this any time."
+  },
+  "accent": {
+    "title": "Which accent do you prefer?",
+    "hint": "Your tutor will speak with this accent and use accent-specific words.",
+    "continueToTest": "Start placement test",
+    "needLanguageFirst": "Pick a language first."
+  },
+  "placement": {
+    "questionOf": "Question {{i}} / {{total}}",
+    "submitLast": "Finish and see result",
+    "submitNext": "Next",
+    "loading": "Preparing questions…",
+    "loadFailedTitle": "Couldn't load questions",
+    "loadFailedBodyHttp": "Questions could not be fetched (HTTP {{status}}).",
+    "loadFailedBodyGeneric": "Trouble loading questions. Check your connection.",
+    "tryAgain": "Try again",
+    "needLanguageFirst": "Pick a language first.",
+    "back": "Back",
+    "category": {
+      "grammar": "Grammar",
+      "vocabulary": "Vocabulary",
+      "context": "Context"
+    }
+  },
+  "result": {
+    "evaluating": "Evaluating your answers…",
+    "yourLevel": "Your level is {{level}}",
+    "dailyPathHint": "I've prepared a personalized {{minutes}}-minute daily path for you.",
+    "offlineNotice": "(Offline scoring — AI scoring will kick in once backend is connected.)",
+    "startLearning": "Start learning",
+    "lessonsWait": "{{langName}} lessons are waiting for you."
+  },
+  "tabs": {
+    "learn": "Learn",
+    "practice": "Practice",
+    "tutor": "Tutor",
+    "leaderboard": "Leaders",
+    "profile": "Profile"
+  },
+  "learn": {
+    "greeting": "Hi 👋",
+    "todayPath": "Today's path",
+    "lessons": {
+      "greetings": { "title": "Greetings & intros", "subtitle": "Unit 1 · 5 exercises" },
+      "numbers": { "title": "Numbers 1-20", "subtitle": "Unit 1 · 4 exercises" },
+      "simpleSentences": { "title": "Simple sentences", "subtitle": "Unit 1 · 6 exercises" },
+      "voiceIntro": { "title": "Voice chat: introductions", "subtitle": "Unit 1 · 1 conversation" }
+    }
+  },
+  "practice": {
+    "title": "Practice",
+    "subtitle": "Keep the streak going with a quick workout.",
+    "onlineDuel": "Online Duel",
+    "onlineDuelDesc": "5-question quick match · 50 XP",
+    "quickOptions": "Quick options",
+    "modes": {
+      "vocab": { "title": "Vocabulary drill", "desc": "5 min · 20 XP" },
+      "listen": { "title": "Listening practice", "desc": "5 min · 25 XP" },
+      "speak": { "title": "Pronunciation challenge", "desc": "3 min · 30 XP" },
+      "story": { "title": "Mini story", "desc": "7 min · 40 XP" }
+    }
+  },
+  "tutorTab": {
+    "title": "AI Tutor",
+    "subtitle": "Pick a mode and start talking now.",
+    "modes": {
+      "text": { "title": "Text chat", "desc": "Type to practice, instant corrections" },
+      "voice": { "title": "Voice chat", "desc": "Talk to a real-time AI tutor" },
+      "video": { "title": "Video lesson", "desc": "Face-to-face with a Pixar-style 3D character" }
+    },
+    "accentCard": {
+      "title": "Pick your accent",
+      "subtitle": "American · British · Scottish · Australian — your tutor speaks and corrects in that accent."
+    }
+  },
+  "leaderboard": {
+    "title": "Leaderboard",
+    "subtitle": "This week's global ranking · Top 100 + your rank",
+    "youSuffix": " (you)"
+  },
+  "profile": {
+    "rankPrefix": "Rank #",
+    "stats": {
+      "xp": "XP",
+      "streak": "Streak",
+      "trophies": "Trophies"
+    },
+    "settingsTitle": "Settings",
+    "rows": {
+      "appLanguage": "App language",
+      "languageAndAccent": "Language & accent",
+      "notifications": "Notifications",
+      "appearance": "Appearance",
+      "subscription": "Subscription",
+      "privacy": "Privacy",
+      "help": "Help & support"
+    },
+    "values": {
+      "on": "On",
+      "system": "System",
+      "free": "Free",
+      "automatic": "Automatic"
+    },
+    "devMode": "Development mode",
+    "signOut": "Sign out (start over)",
+    "signOutFailedTitle": "Sign-out failed"
+  },
+  "lesson": {
+    "titleHash": "Lesson #{{id}}",
+    "stubBody": "This screen will soon be filled with interactive exercises, pronunciation scoring, and XP rewards."
+  },
+  "voiceTutor": {
+    "title": "AI Tutor",
+    "stubBody": "ElevenLabs Conversational AI is coming soon.\nA Pixar-style 3D avatar from Meshy is on the way.",
+    "tapToSpeak": "Tap to speak",
+    "finish": "End"
+  },
+  "chatTutor": {
+    "needLanguageTitle": "Finish your language pick first",
+    "needLanguageBody": "You need a language and level to chat with the AI tutor.",
+    "goToLanguagePicker": "Go to language picker",
+    "headerTitle": "AI Tutor",
+    "welcomeMessage": "Hi! I'm Suno.",
+    "introHelp": "Let's practice {{langName}} today. How can I help you at the {{level}} level?",
+    "typing": "AI tutor is typing…",
+    "inputPlaceholder": "Type something…",
+    "suggestions": {
+      "greetings": "Let's practice greetings",
+      "orderCoffee": "How do I order coffee?",
+      "correctMistakes": "Correct my mistakes please"
+    },
+    "errors": {
+      "quotaExceeded": "You've used today's chat quota.",
+      "rateLimit": "You're typing too fast — wait a moment.",
+      "sessionExpired": "Your session expired — please reopen the app.",
+      "generic": "Error: {{message}}"
+    }
+  },
+  "appLanguage": {
+    "title": "Choose your app language",
+    "subtitle": "You can change this any time from Settings.",
+    "automatic": "Automatic",
+    "automaticHint": "Match my device language",
+    "moreSoon": "More languages coming soon.",
+    "english": "English",
+    "turkish": "Türkçe"
+  }
+}
